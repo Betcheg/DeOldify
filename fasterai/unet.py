@@ -53,8 +53,7 @@ class UnetBlockDeep(nn.Module):
         s = self.hook.stored
         up_out = self.shuf(up_in)
         ssh = s.shape[-2:]
-        if ssh != up_out.shape[-2:]:
-            up_out = F.interpolate(up_out, s.shape[-2:], mode='nearest')
+        up_out = F.interpolate(up_out, s.shape[-2:], mode='nearest')
         cat_x = self.relu(torch.cat([up_out, self.bn(s)], dim=1))
         return self.conv2(self.conv1(cat_x))
 
