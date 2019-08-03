@@ -85,6 +85,26 @@ def _parse_arg(value, desc):
             raise RuntimeError("ONNX symbolic doesn't know to interpret Constant node")
     elif value.node().kind() == 'prim::ListConstruct':
         if desc == 'is':
+            for v in value.node().inputs():
+                if v.node().kind() != 'onnx::Constant':
+                    print("=====DEBUG======")
+                    print("value node inputs")
+                    print(value.node().inputs())
+                    print("value node")
+                    print(value.node()) 
+                    print("value")
+                    print(value)   
+                    print("v node kind")
+                    print(v.node().kind())
+                    print("v node")
+                    print(v.node())
+                    print("v:")
+                    print(v)
+                    print("================")
+                    
+                    raise RuntimeError("Failed to export an ONNX attribute, "
+                                       "since it's not constant, please try to make "
+                                       "things (e.g., kernel size) static if possible")
             return [int(v.node()['value']) for v in value.node().inputs()]
         else:
             raise RuntimeError("ONNX symbolic doesn't know to interpret ListConstruct node")
