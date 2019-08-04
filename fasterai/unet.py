@@ -55,8 +55,8 @@ class UnetBlockDeep(nn.Module):
         print("SHAPE:")
         print(s.shape)
         ssh = s.shape[-2:]
-        print("SSH SHAPE:")
-        print(ssh.shape)
+        print("SSH :")
+        print(ssh)
         print("#########")
         up_out = F.interpolate(up_out, s.shape[-2:], mode='nearest')
         cat_x = self.relu(torch.cat([up_out, self.bn(s)], dim=1))
