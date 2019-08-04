@@ -52,7 +52,12 @@ class UnetBlockDeep(nn.Module):
     def forward(self, up_in:Tensor) -> Tensor:
         s = self.hook.stored
         up_out = self.shuf(up_in)
+        print("SHAPE:")
+        print(s.shape)
         ssh = s.shape[-2:]
+        print("SSH SHAPE:")
+        print(ssh.shape)
+        print("#########")
         up_out = F.interpolate(up_out, s.shape[-2:], mode='nearest')
         cat_x = self.relu(torch.cat([up_out, self.bn(s)], dim=1))
         return self.conv2(self.conv1(cat_x))
