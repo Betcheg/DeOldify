@@ -60,7 +60,7 @@ class UnetBlockDeep(nn.Module):
         print("#########")
         ssh = (256, 256)
         up_out = F.interpolate(up_out, ssh, mode='nearest')
-        cat_x = self.relu(torch.cat([up_out, self.bn(s)], dim=2))
+        cat_x = self.relu(torch.cat([up_out, self.bn(s)], dim=0))
         return self.conv2(self.conv1(cat_x))
 
 
