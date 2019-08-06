@@ -33,7 +33,7 @@ class CustomPixelShuffle_ICNR(nn.Module):
 
     def forward(self,x):
         x = self.shuf(self.relu(self.conv(x)))
-        return self.blur(self.pad(x)) if self.blur else x
+        return x #self.blur(self.pad(x)) if self.blur else x
 
 class UnetBlockDeep(nn.Module):
     "A quasi-UNet block, using `PixelShuffle_ICNR upsampling`."
