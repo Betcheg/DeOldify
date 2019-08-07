@@ -32,7 +32,9 @@ class CustomPixelShuffle_ICNR(nn.Module):
         self.relu = relu(True, leaky=leaky)
 
     def forward(self,x):
+        print("before CustomPixelShuffle_ICNR")
         x = self.shuf(self.relu(self.conv(x)))
+        print("after CustomPixelShuffle_ICNR")
         return x #self.blur(self.pad(x)) if self.blur else x
 
 class UnetBlockDeep(nn.Module):
@@ -50,6 +52,7 @@ class UnetBlockDeep(nn.Module):
         self.relu = relu(leaky=leaky)
 
     def forward(self, up_in:Tensor) -> Tensor:
+        print("before UnetBlockDeep")
         s = self.hook.stored
         up_out = self.shuf(up_in)
         print("SHAPE:")
@@ -61,6 +64,7 @@ class UnetBlockDeep(nn.Module):
         #ssh = (256, 256)
         up_out = F.interpolate(up_out, ssh, mode='nearest')
         cat_x = self.relu(torch.cat([up_out, self.bn(s)], dim=1))
+        print("After UnetBlockDeep")
         return self.conv2(self.conv1(cat_x))
 
 
@@ -123,22 +127,26 @@ class UnetBlockWide(nn.Module):
         self.relu = relu(leaky=leaky)
 
     def forward(self, up_in:Tensor) -> Tensor:
+        print("before UnetBlockWide")
         s = self.hook.stored
         up_out = self.shuf(up_in)
         ssh = s.shape[-2:]
         if ssh != up_out.shape[-2:]:
             up_out = F.interpolate(up_out, s.shape[-2:], mode='nearest')
         cat_x = self.relu(torch.cat([up_out, self.bn(s)], dim=1))
+        print("After UnetBlockWide")
         return self.conv(cat_x)
 
 
 class DynamicUnetWide(SequentialEx):
     "Create a U-Net from a given architecture."
+   
     def __init__(self, encoder:nn.Module, n_classes:int, blur:bool=False, blur_final=True, self_attention:bool=False,
                  y_range:Optional[Tuple[float,float]]=None, last_cross:bool=True, bottle:bool=False,
                  norm_type:Optional[NormType]=NormType.Batch, nf_factor:int=1, **kwargs):
         
         nf = 512 * nf_factor
+        print("Before Dynamic")
         extra_bn =  norm_type == NormType.Spectral
         imsize = (256,256)
         sfs_szs = model_sizes(encoder, size=imsize)
@@ -173,6 +181,7 @@ class DynamicUnetWide(SequentialEx):
             layers.append(res_block(ni, bottle=bottle, norm_type=norm_type, **kwargs))
         layers += [custom_conv_layer(ni, n_classes, ks=1, use_activ=False, norm_type=norm_type)]
         if y_range is not None: layers.append(SigmoidRange(*y_range))
+        print("After Dynamic")
         super().__init__(*layers)
 
     def __del__(self):
