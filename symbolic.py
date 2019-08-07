@@ -329,6 +329,9 @@ def mul(g, self, other):
 def dot(g, self, other):
     return mul(g, self, other)
 
+def mv(g, self, other):
+    return mul(g, self, other)
+
 def div(g, self, other):
     # See Note [Pointwise by scalar]
     other = _maybe_get_scalar(other)
