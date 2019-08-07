@@ -326,6 +326,8 @@ def mul(g, self, other):
     other = _maybe_get_scalar(other)
     return g.op("Mul", self, _if_scalar_type_as(g, other, self))
 
+def dot(g, self, other):
+    return mul(g, self, other)
 
 def div(g, self, other):
     # See Note [Pointwise by scalar]
