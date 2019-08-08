@@ -809,12 +809,16 @@ class DivMulConstantRemover(object):
                     for child_node in node.children:
                         child_node.parents.remove(node)
                         if node.op_type == 'Div':
-                            print("Number of dimension")
+                            print("Number of dimension DIV")
                             print(x.ndim)
                             if(x.ndim  == 1):
                                 x = x.transpose()
                             child_node.input_tensors[node.outputs[0]] = x / y
                         else:
+                            print("Number of dimension MUL")
+                            print(x.ndim)
+                            if(x.ndim  == 1):
+                                x = x.transpose()
                             child_node.input_tensors[node.outputs[0]] = x * y
         transformed_nodes = []
         for node in graph.nodes:
