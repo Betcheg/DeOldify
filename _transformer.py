@@ -811,7 +811,7 @@ class DivMulConstantRemover(object):
                         if node.op_type == 'Div':
                             print("Number of dimension")
                             print(x.ndim)
-                            if(x.ndim  == 1)
+                            if(x.ndim  == 1):
                                 x = x.transpose()
                             child_node.input_tensors[node.outputs[0]] = x / y
                         else:
