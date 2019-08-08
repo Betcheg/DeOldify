@@ -285,6 +285,10 @@ class ReshapeInitTensorFuser(object):
             if any([s == 0 for s in shape]):
                 continue
 
+            print("Type")    
+            print(type(shape))
+            print("Tensor")
+            print(type(tensor))    
             reshaped_tensor = tensor.reshape(shape)
 
             for child in node.children:
