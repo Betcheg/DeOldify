@@ -285,12 +285,10 @@ class ReshapeInitTensorFuser(object):
             if any([s == 0 for s in shape]):
                 continue
 
-            print("Type")    
+            print("Shape")    
             print(type(shape))
             print(shape)
-            print("Tensor")
-            print(type(tensor)) 
-            print(tensor)
+ 
             reshaped_tensor = tensor.reshape((int(shape[0]), int(shape[1])))
 
             for child in node.children:
@@ -811,6 +809,10 @@ class DivMulConstantRemover(object):
                     for child_node in node.children:
                         child_node.parents.remove(node)
                         if node.op_type == 'Div':
+                            print("Number of dimension")
+                            print(x.ndim)
+                            if(x.ndim  == 1)
+                                x = x.transpose()
                             child_node.input_tensors[node.outputs[0]] = x / y
                         else:
                             child_node.input_tensors[node.outputs[0]] = x * y
