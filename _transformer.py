@@ -819,7 +819,7 @@ class DivMulConstantRemover(object):
                             print(x.ndim)
                             if(x.ndim  == 1):
                                 x = x.transpose()
-                            child_node.input_tensors[node.outputs[0]] = x * y
+                            child_node.input_tensors[node.outputs[0]] = np.dot(x,y)
         transformed_nodes = []
         for node in graph.nodes:
             if node not in nodes_to_be_removed:
