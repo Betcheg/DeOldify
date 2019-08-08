@@ -287,9 +287,11 @@ class ReshapeInitTensorFuser(object):
 
             print("Type")    
             print(type(shape))
+            print(shape)
             print("Tensor")
-            print(type(tensor))    
-            reshaped_tensor = tensor.reshape(shape)
+            print(type(tensor)) 
+            print(tensor)
+            reshaped_tensor = tensor.reshape(int(shape))
 
             for child in node.children:
                 child.parents.remove(node)
