@@ -42,6 +42,16 @@ class BaseFilter(IFilter):
         x =  pil2tensor(model_image,np.float32)
         x.div_(255)
         x,y = self.norm((x,x), do_x=True)
+        print("Just before prediction")
+        print("x")
+        print(x)
+        print("y")
+        print(y)
+        print("x none")
+        print(x[None].cuda())
+        print("y none")
+        print(y[None])
+        
         result = self.learn.pred_batch(ds_type=DatasetType.Valid, 
             batch=(x[None].cuda(),y[None]), reconstruct=True)
         out = result[0]
