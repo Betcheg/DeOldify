@@ -707,10 +707,11 @@ def _Workspace_feed_blob(ws, name, arr, device_option=None):
             )
 
     name = StringifyBlobName(name)
-    if device_option is not None:
-        return ws.create_blob(name).feed(arr, device_option)
-    else:
-        return ws.create_blob(name).feed(arr)
+    return ws.create_blob(name).feed(arr)
+    #if device_option is not None:
+    #    return ws.create_blob(name).feed(arr, device_option)
+    #else:
+     #   return ws.create_blob(name).feed(arr)
 
 
 def _Workspace_remove_blob(ws, blob):
@@ -727,6 +728,8 @@ Workspace.remove_blob = _Workspace_remove_blob
 
 
 def _Blob_feed(blob, arg, device_option=None):
+    print("device option is: ")
+    print(device_option)
     # conservative type check to avoid unnecessary import
     if type(arg).__name__ == 'Tensor' and type(arg).__module__ == 'torch':
         import torch
