@@ -36,7 +36,6 @@ SwitchWorkspace = C.switch_workspace
 RootFolder = C.root_folder
 Workspaces = C.workspaces
 BenchmarkNet = C.benchmark_net
-BenchmarkNetOnce = C.benchmark_net_once
 GetStats = C.get_stats
 
 operator_tracebacks = defaultdict(dict)
@@ -58,7 +57,6 @@ if has_cuda_support:
         return np.asarray(C.get_cuda_peer_access_pattern())
 
     GetDeviceProperties = C.get_device_properties
-    GetGPUMemoryInfo = C.get_gpu_memory_info
 else:
     NumCudaDevices = lambda: 0 # noqa
     GetCUDAVersion = lambda: 0 # noqa
@@ -71,7 +69,6 @@ if has_hip_support:
     def GetGpuPeerAccessPattern():
         return np.asarray(C.get_hip_peer_access_pattern())
     GetDeviceProperties = C.get_device_properties
-    GetGPUMemoryInfo = C.get_gpu_memory_info
 
 if not has_gpu_support:
     # setting cuda as the default GpuDeviceType as some tests
@@ -80,7 +77,6 @@ if not has_gpu_support:
     NumGpuDevices = lambda: 0 # noqa
     GetDeviceProperties = lambda x: None # noqa
     GetGpuPeerAccessPattern = lambda: np.array([]) # noqa
-    GetGPUMemoryInfo = lambda: None # noqa
 
 IsNUMAEnabled = C.is_numa_enabled
 GetNumNUMANodes = C.get_num_numa_nodes
@@ -707,11 +703,13 @@ def _Workspace_feed_blob(ws, name, arr, device_option=None):
             )
 
     name = StringifyBlobName(name)
+    print("device option is:")
+    print(device_option)
     return ws.create_blob(name).feed(arr)
     #if device_option is not None:
     #    return ws.create_blob(name).feed(arr, device_option)
     #else:
-     #   return ws.create_blob(name).feed(arr)
+    #    return ws.create_blob(name).feed(arr)
 
 
 def _Workspace_remove_blob(ws, blob):
@@ -728,8 +726,6 @@ Workspace.remove_blob = _Workspace_remove_blob
 
 
 def _Blob_feed(blob, arg, device_option=None):
-    print("device option is: ")
-    print(device_option)
     # conservative type check to avoid unnecessary import
     if type(arg).__name__ == 'Tensor' and type(arg).__module__ == 'torch':
         import torch
