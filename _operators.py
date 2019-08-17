@@ -112,6 +112,8 @@ def _get_coreml_target_shape(target_shape, builder, node, graph, err):
             return err.unsupported_op_configuration(builder, node, graph, "Supports tensors not more than 4d") # type: ignore
     else:
         coreml_shape = None
+    print("Target shape")
+    print(len(target_shape))
     return coreml_shape
 
 def _get_coreml_axis(axes, builder, node, graph, err): # type: (List[int], NeuralNetworkBuilder, node, Graph, ErrorHandling) -> Text
